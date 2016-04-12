@@ -332,7 +332,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	          scrollTop = undefined,
 	          styles = undefined;
 	      gBCR = _this.refs.dtpbutton.getBoundingClientRect();
-	      console.log(gBCR);
 	      classes = {
 	        "bootstrap-datetimepicker-widget": true,
 	        "dropdown-menu": true
@@ -360,7 +359,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        position: "absolute",
 	        top: offset.top,
 	        left: "auto",
-	        right: 8
+	        right: 1
 	      };
 	      return _this.setState({
 	        widgetStyle: styles,

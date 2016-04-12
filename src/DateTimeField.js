@@ -259,7 +259,6 @@ export default class DateTimeField extends Component {
   setWidgetStylesAndClasses = () => {
     let classes, gBCR, offset, placePosition, scrollTop, styles;
     gBCR = this.refs.dtpbutton.getBoundingClientRect();
-    console.log(gBCR)
     classes = {
       "bootstrap-datetimepicker-widget": true,
       "dropdown-menu": true
@@ -287,7 +286,7 @@ export default class DateTimeField extends Component {
       position: "absolute",
       top: offset.top,
       left: "auto",
-      right: 8
+      right: 1
     };
     return this.setState({
       widgetStyle: styles,
