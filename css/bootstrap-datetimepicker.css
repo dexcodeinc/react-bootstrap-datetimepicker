@@ -2,6 +2,9 @@
  * Datetimepicker for Bootstrap v3
  * https://github.com/Eonasdan/bootstrap-datetimepicker/
  */
+.bootstrap-datetimepicker-container {
+  position: relative; 
+}
 .bootstrap-datetimepicker-widget {
   top: 0;
   left: 0;

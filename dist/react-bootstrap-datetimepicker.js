@@ -151,6 +151,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        state.selectedDate = (0, _moment2["default"])(nextProps.dateTime, nextProps.format, true);
 	        state.inputValue = (0, _moment2["default"])(nextProps.dateTime, nextProps.format, true).format(nextProps.inputFormat ? nextProps.inputFormat : _this.state.inputFormat);
 	      }
+
 	      return _this.setState(state);
 	    };
 
@@ -323,6 +324,50 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 	    };
 
+	    this.setWidgetStylesAndClasses = function () {
+	      var classes = undefined,
+	          gBCR = undefined,
+	          offset = undefined,
+	          placePosition = undefined,
+	          scrollTop = undefined,
+	          styles = undefined;
+	      gBCR = _this.refs.dtpbutton.getBoundingClientRect();
+	      console.log(gBCR);
+	      classes = {
+	        "bootstrap-datetimepicker-widget": true,
+	        "dropdown-menu": true
+	      };
+	      offset = {
+	        top: gBCR.top + window.pageYOffset - document.documentElement.clientTop,
+	        left: gBCR.left + window.pageXOffset - document.documentElement.clientLeft
+	      };
+	      offset.top = offset.top + _this.refs.datetimepicker.offsetHeight;
+	      scrollTop = window.pageYOffset !== undefined ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+	      placePosition = _this.props.direction === "up" ? "top" : _this.props.direction === "bottom" ? "bottom" : _this.props.direction === "auto" ? offset.top + _this.refs.widget.offsetHeight > window.offsetHeight + scrollTop && _this.refs.widget.offsetHeight + _this.refs.datetimepicker.offsetHeight > offset.top ? "top" : "bottom" : void 0;
+	      if (placePosition === "top") {
+	        offset.top = -_this.refs.widget.offsetHeight - _this.clientHeight - 2;
+	        classes.top = true;
+	        classes.bottom = false;
+	        classes["pull-right"] = true;
+	      } else {
+	        offset.top = 40;
+	        classes.top = false;
+	        classes.bottom = true;
+	        classes["pull-right"] = true;
+	      }
+	      styles = {
+	        display: "block",
+	        position: "absolute",
+	        top: offset.top,
+	        left: "auto",
+	        right: 8
+	      };
+	      return _this.setState({
+	        widgetStyle: styles,
+	        widgetClasses: classes
+	      });
+	    };
+
 	    this.onClick = function () {
 	      var classes = undefined,
 	          gBCR = undefined,
@@ -333,44 +378,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (_this.state.showPicker) {
 	        return _this.closePicker();
 	      } else {
-	        _this.setState({
-	          showPicker: true
-	        });
-	        gBCR = _this.refs.dtpbutton.getBoundingClientRect();
-	        classes = {
-	          "bootstrap-datetimepicker-widget": true,
-	          "dropdown-menu": true
-	        };
-	        offset = {
-	          top: gBCR.top + window.pageYOffset - document.documentElement.clientTop,
-	          left: gBCR.left + window.pageXOffset - document.documentElement.clientLeft
-	        };
-	        offset.top = offset.top + _this.refs.datetimepicker.offsetHeight;
-	        scrollTop = window.pageYOffset !== undefined ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
-	        placePosition = _this.props.direction === "up" ? "top" : _this.props.direction === "bottom" ? "bottom" : _this.props.direction === "auto" ? offset.top + _this.refs.widget.offsetHeight > window.offsetHeight + scrollTop && _this.refs.widget.offsetHeight + _this.refs.datetimepicker.offsetHeight > offset.top ? "top" : "bottom" : void 0;
-	        if (placePosition === "top") {
-	          offset.top = -_this.refs.widget.offsetHeight - _this.clientHeight - 2;
-	          classes.top = true;
-	          classes.bottom = false;
-	          classes["pull-right"] = true;
-	        } else {
-	          offset.top = 40;
-	          classes.top = false;
-	          classes.bottom = true;
-	          classes["pull-right"] = true;
-	        }
-	        styles = {
-	          display: "block",
-	          position: "absolute",
-	          top: offset.top,
-	          left: "auto",
-	          right: 40
-	        };
-	        return _this.setState({
-	          widgetStyle: styles,
-	          widgetClasses: classes
-	        });
+	        _this.setState({ showPicker: true });
+	        return _this.setWidgetStylesAndClasses();
 	      }
+	    };
+
+	    this.onFocus = function () {
+	      _this.setState({ showPicker: true });
+	      return _this.setWidgetStylesAndClasses();
 	    };
 
 	    this.closePicker = function () {
@@ -416,7 +431,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function render() {
 	      return _react2["default"].createElement(
 	        "div",
-	        null,
+	        { className: "bootstrap-datetimepicker-container" },
 	        this.renderOverlay(),
 	        _react2["default"].createElement(_DateTimePickerJs2["default"], {
 	          addDecade: this.addDecade,
@@ -452,8 +467,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }),
 	        _react2["default"].createElement(
 	          "div",
-	          { className: "input-group date " + this.size(), ref: "datetimepicker" },
-	          _react2["default"].createElement("input", _extends({ className: "form-control", onChange: this.onChange, type: "text", value: this.state.inputValue }, this.props.inputProps)),
+	          { className: "input-group date " + this.props.inputGroupClass + " " + this.size(),
+	            ref: "datetimepicker" },
+	          _react2["default"].createElement("input", _extends({ className: "form-control", onChange: this.onChange, onFocus: this.onFocus, type: "text", value: this.state.inputValue }, this.props.inputProps)),
 	          _react2["default"].createElement(
 	            "span",
 	            { className: "input-group-addon", onBlur: this.onBlur, onClick: this.onClick, ref: "dtpbutton" },
@@ -483,6 +499,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      dateTime: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number]),
 	      onChange: _react.PropTypes.func,
 	      format: _react.PropTypes.string,
+	      inputGroupClass: _react.PropTypes.string,
 	      inputProps: _react.PropTypes.object,
 	      inputFormat: _react.PropTypes.string,
 	      defaultText: _react.PropTypes.string,
@@ -1064,8 +1081,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2015 Jed Watson.
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
 	  Licensed under the MIT License (MIT), see
 	  http://jedwatson.github.io/classnames
 	*/
@@ -1077,7 +1094,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		var hasOwn = {}.hasOwnProperty;
 
 		function classNames () {
-			var classes = '';
+			var classes = [];
 
 			for (var i = 0; i < arguments.length; i++) {
 				var arg = arguments[i];
@@ -1086,28 +1103,28 @@ return /******/ (function(modules) { // webpackBootstrap
 				var argType = typeof arg;
 
 				if (argType === 'string' || argType === 'number') {
-					classes += ' ' + arg;
+					classes.push(arg);
 				} else if (Array.isArray(arg)) {
-					classes += ' ' + classNames.apply(null, arg);
+					classes.push(classNames.apply(null, arg));
 				} else if (argType === 'object') {
 					for (var key in arg) {
 						if (hasOwn.call(arg, key) && arg[key]) {
-							classes += ' ' + key;
+							classes.push(key);
 						}
 					}
 				}
 			}
 
-			return classes.substr(1);
+			return classes.join(' ');
 		}
 
 		if (typeof module !== 'undefined' && module.exports) {
 			module.exports = classNames;
 		} else if (true) {
 			// register as 'classnames', consistent with npm package name
-			!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
 				return classNames;
-			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 		} else {
 			window.classNames = classNames;
 		}
