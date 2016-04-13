@@ -5,8 +5,11 @@ import DateTimePicker from "./DateTimePicker.js";
 import Constants from "./Constants.js";
 
 export default class DateTimeField extends Component {
+  static isDateTimePresent = (dateTime) => {
+    return dateTime && dateTime.toString().trim() !== '';
+  }
+  
   static defaultProps = {
-    dateTime: moment().format("x"),
     format: "x",
     showToday: true,
     viewMode: "days",
@@ -63,9 +66,16 @@ export default class DateTimeField extends Component {
       left: -9999,
       zIndex: "9999 !important"
     },
-    viewDate: moment(this.props.dateTime, this.props.format, true).startOf("month"),
-    selectedDate: moment(this.props.dateTime, this.props.format, true),
-    inputValue: typeof this.props.defaultText !== "undefined" ? this.props.defaultText : moment(this.props.dateTime, this.props.format, true).format(this.resolvePropsInputFormat())
+    viewDate: DateTimeField.isDateTimePresent(this.props.dateTime) ? 
+      moment(this.props.dateTime, this.props.format, true).startOf('month') :
+      moment().startOf('month'),
+    selectedDate: DateTimeField.isDateTimePresent(this.props.dateTime) ? 
+      moment(this.props.dateTime, this.props.format, true) :
+      null,
+    inputValue: typeof this.props.defaultText !== "undefined" ? this.props.defaultText : 
+      (DateTimeField.isDateTimePresent(this.props.dateTime) ?
+        moment(this.props.dateTime, this.props.format, true).format(this.resolvePropsInputFormat()) :
+        '')
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -93,6 +103,10 @@ export default class DateTimeField extends Component {
         selectedDate: moment(value, this.state.inputFormat, true),
         viewDate: moment(value, this.state.inputFormat, true).startOf("month")
       });
+    } else {
+      this.setState({
+        selectedDate: null
+      });
     }
 
     return this.setState({
@@ -111,11 +125,12 @@ export default class DateTimeField extends Component {
     const { target } = e;
     if (target.className && !target.className.match(/disabled/g)) {
       let month;
+      let selectedDate = this.state.selectedDate || moment();
       if (target.className.indexOf("new") >= 0) month = this.state.viewDate.month() + 1;
       else if (target.className.indexOf("old") >= 0) month = this.state.viewDate.month() - 1;
       else month = this.state.viewDate.month();
       return this.setState({
-        selectedDate: this.state.viewDate.clone().month(month).date(parseInt(e.target.innerHTML)).hour(this.state.selectedDate.hours()).minute(this.state.selectedDate.minutes())
+        selectedDate: this.state.viewDate.clone().month(month).date(parseInt(e.target.innerHTML)).hour(selectedDate.hours()).minute(selectedDate.minutes())
       }, function() {
         this.closePicker();
         this.props.onChange(this.state.selectedDate.format(this.props.format));

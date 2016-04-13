@@ -121,6 +121,7 @@ class Basic extends Component {
               <div className="col-xs-12">
                   just date picker
                   <DateTimeField
+                      format='YYYY-MM-DD'
                       mode="date"
                       />
                   <pre> {'<DateTimeField mode="date" />'} </pre>

@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from "react";
+import moment from "moment";
 import classnames from "classnames";
 
 export default class DateTimePickerYears extends Component {
@@ -6,7 +7,7 @@ export default class DateTimePickerYears extends Component {
     subtractDecade: PropTypes.func.isRequired,
     addDecade: PropTypes.func.isRequired,
     viewDate: PropTypes.object.isRequired,
-    selectedDate: PropTypes.object.isRequired,
+    selectedDate: PropTypes.object,
     setViewYear: PropTypes.func.isRequired
   }
 
@@ -20,7 +21,7 @@ export default class DateTimePickerYears extends Component {
       classes = {
         year: true,
         old: i === -1 | i === 10,
-        active: this.props.selectedDate.year() === year
+        active: (this.props.selectedDate || moment()).year() === year
       };
       years.push(<span className={classnames(classes)} key={year}onClick={this.props.setViewYear}>{year}</span>);
       year++;
@@ -55,4 +56,3 @@ export default class DateTimePickerYears extends Component {
     );
   }
 }
-

@@ -8,7 +8,7 @@ export default class DateTimePickerDate extends Component {
     subtractMonth: PropTypes.func.isRequired,
     addMonth: PropTypes.func.isRequired,
     viewDate: PropTypes.object.isRequired,
-    selectedDate: PropTypes.object.isRequired,
+    selectedDate: PropTypes.object,
     showToday: PropTypes.bool,
     viewMode: PropTypes.oneOfType([
       PropTypes.string,
@@ -144,4 +144,3 @@ export default class DateTimePickerDate extends Component {
     );
   }
 }
-

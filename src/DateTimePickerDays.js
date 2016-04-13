@@ -7,7 +7,7 @@ export default class DateTimePickerDays extends Component {
     subtractMonth: PropTypes.func.isRequired,
     addMonth: PropTypes.func.isRequired,
     viewDate: PropTypes.object.isRequired,
-    selectedDate: PropTypes.object.isRequired,
+    selectedDate: PropTypes.object,
     showToday: PropTypes.bool,
     daysOfWeekDisabled: PropTypes.array,
     setSelectedDate: PropTypes.func.isRequired,
@@ -41,10 +41,10 @@ export default class DateTimePickerDays extends Component {
       } else if (prevMonth.year() > year || (prevMonth.year() === year && prevMonth.month() > month)) {
         classes.new = true;
       }
-      if (prevMonth.isSame(moment({
-        y: this.props.selectedDate.year(),
-        M: this.props.selectedDate.month(),
-        d: this.props.selectedDate.date()
+      if (this.props.selectedDate && prevMonth.isSame(moment({
+        y: (this.props.selectedDate).year(),
+        M: (this.props.selectedDate).month(),
+        d: (this.props.selectedDate).date()
       }))) {
         classes.active = true;
       }
@@ -106,4 +106,3 @@ export default class DateTimePickerDays extends Component {
     );
   }
 }
-

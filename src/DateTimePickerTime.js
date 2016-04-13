@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from "react";
+import moment from "moment";
 import DateTimePickerMinutes from "./DateTimePickerMinutes";
 import DateTimePickerHours from "./DateTimePickerHours";
 import Constants from "./Constants.js";
@@ -12,7 +13,7 @@ export default class DateTimePickerTime extends Component {
     subtractMinute: PropTypes.func.isRequired,
     addMinute: PropTypes.func.isRequired,
     viewDate: PropTypes.object.isRequired,
-    selectedDate: PropTypes.object.isRequired,
+    selectedDate: PropTypes.object,
     togglePeriod: PropTypes.func.isRequired,
     mode: PropTypes.oneOf([Constants.MODE_DATE, Constants.MODE_DATETIME, Constants.MODE_TIME])
   }
@@ -74,15 +75,15 @@ export default class DateTimePickerTime extends Component {
             </tr>
 
             <tr>
-              <td><span className="timepicker-hour" onClick={this.showHours}>{this.props.selectedDate.format("h")}</span></td>
+              <td><span className="timepicker-hour" onClick={this.showHours}>{(this.props.selectedDate || moment()).format("h")}</span></td>
 
               <td className="separator">:</td>
 
-              <td><span className="timepicker-minute" onClick={this.showMinutes}>{this.props.selectedDate.format("mm")}</span></td>
+              <td><span className="timepicker-minute" onClick={this.showMinutes}>{(this.props.selectedDate || moment()).format("mm")}</span></td>
 
               <td className="separator"></td>
 
-              <td><button className="btn btn-primary" onClick={this.props.togglePeriod} type="button">{this.props.selectedDate.format("A")}</button></td>
+              <td><button className="btn btn-primary" onClick={this.props.togglePeriod} type="button">{(this.props.selectedDate || moment()).format("A")}</button></td>
             </tr>
 
             <tr>
