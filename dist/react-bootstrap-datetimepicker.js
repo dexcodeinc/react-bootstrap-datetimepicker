@@ -368,6 +368,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    this.onClick = function () {
+	      if (_this.props.disabled) {
+	        return;
+	      }
 	      var classes = undefined,
 	          gBCR = undefined,
 	          offset = undefined,
@@ -383,6 +386,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    this.onFocus = function () {
+	      if (_this.props.disabled) {
+	        return;
+	      }
 	      _this.setState({ showPicker: true });
 	      return _this.setWidgetStylesAndClasses();
 	    };
@@ -468,7 +474,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          "div",
 	          { className: "input-group date " + this.props.inputGroupClass + " " + this.size(),
 	            ref: "datetimepicker" },
-	          _react2["default"].createElement("input", _extends({ className: "form-control", onChange: this.onChange, onFocus: this.onFocus, type: "text", value: this.state.inputValue }, this.props.inputProps)),
+	          _react2["default"].createElement("input", _extends({ className: "form-control", onChange: this.onChange, onFocus: this.onFocus, type: "text", value: this.state.inputValue, disabled: this.props.disabled }, this.props.inputProps)),
 	          _react2["default"].createElement(
 	            "span",
 	            { className: "input-group-addon", onBlur: this.onBlur, onClick: this.onClick, ref: "dtpbutton" },
@@ -509,7 +515,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      showToday: _react.PropTypes.bool,
 	      viewMode: _react.PropTypes.string,
 	      size: _react.PropTypes.oneOf([_ConstantsJs2["default"].SIZE_SMALL, _ConstantsJs2["default"].SIZE_MEDIUM, _ConstantsJs2["default"].SIZE_LARGE]),
-	      daysOfWeekDisabled: _react.PropTypes.arrayOf(_react.PropTypes.number)
+	      daysOfWeekDisabled: _react.PropTypes.arrayOf(_react.PropTypes.number),
+	      disabled: _react.PropTypes.bool
 	    },
 	    enumerable: true
 	  }]);
