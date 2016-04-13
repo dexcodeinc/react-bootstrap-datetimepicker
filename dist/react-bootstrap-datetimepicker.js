@@ -134,9 +134,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        left: -9999,
 	        zIndex: "9999 !important"
 	      },
-	      viewDate: (0, _moment2["default"])(this.props.dateTime, this.props.format, true).startOf("month"),
-	      selectedDate: (0, _moment2["default"])(this.props.dateTime, this.props.format, true),
-	      inputValue: typeof this.props.defaultText !== "undefined" ? this.props.defaultText : (0, _moment2["default"])(this.props.dateTime, this.props.format, true).format(this.resolvePropsInputFormat())
+	      viewDate: DateTimeField.isDateTimePresent(this.props.dateTime) ? (0, _moment2["default"])(this.props.dateTime, this.props.format, true).startOf('month') : (0, _moment2["default"])().startOf('month'),
+	      selectedDate: DateTimeField.isDateTimePresent(this.props.dateTime) ? (0, _moment2["default"])(this.props.dateTime, this.props.format, true) : null,
+	      inputValue: typeof this.props.defaultText !== "undefined" ? this.props.defaultText : DateTimeField.isDateTimePresent(this.props.dateTime) ? (0, _moment2["default"])(this.props.dateTime, this.props.format, true).format(this.resolvePropsInputFormat()) : ''
 	    };
 
 	    this.componentWillReceiveProps = function (nextProps) {
@@ -162,6 +162,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          selectedDate: (0, _moment2["default"])(value, _this.state.inputFormat, true),
 	          viewDate: (0, _moment2["default"])(value, _this.state.inputFormat, true).startOf("month")
 	        });
+	      } else {
+	        _this.setState({
+	          selectedDate: null
+	        });
 	      }
 
 	      return _this.setState({
@@ -180,9 +184,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      if (target.className && !target.className.match(/disabled/g)) {
 	        var month = undefined;
+	        var selectedDate = _this.state.selectedDate || (0, _moment2["default"])();
 	        if (target.className.indexOf("new") >= 0) month = _this.state.viewDate.month() + 1;else if (target.className.indexOf("old") >= 0) month = _this.state.viewDate.month() - 1;else month = _this.state.viewDate.month();
 	        return _this.setState({
-	          selectedDate: _this.state.viewDate.clone().month(month).date(parseInt(e.target.innerHTML)).hour(_this.state.selectedDate.hours()).minute(_this.state.selectedDate.minutes())
+	          selectedDate: _this.state.viewDate.clone().month(month).date(parseInt(e.target.innerHTML)).hour(selectedDate.hours()).minute(selectedDate.minutes())
 	        }, function () {
 	          this.closePicker();
 	          this.props.onChange(this.state.selectedDate.format(this.props.format));
@@ -484,9 +489,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      );
 	    }
 	  }], [{
+	    key: "isDateTimePresent",
+	    value: function value(dateTime) {
+	      return dateTime && dateTime.toString().trim() !== '';
+	    },
+	    enumerable: true
+	  }, {
 	    key: "defaultProps",
 	    value: {
-	      dateTime: (0, _moment2["default"])().format("x"),
 	      format: "x",
 	      showToday: true,
 	      viewMode: "days",
@@ -1271,7 +1281,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      subtractMonth: _react.PropTypes.func.isRequired,
 	      addMonth: _react.PropTypes.func.isRequired,
 	      viewDate: _react.PropTypes.object.isRequired,
-	      selectedDate: _react.PropTypes.object.isRequired,
+	      selectedDate: _react.PropTypes.object,
 	      showToday: _react.PropTypes.bool,
 	      viewMode: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number]),
 	      mode: _react.PropTypes.oneOf([_ConstantsJs2["default"].MODE_DATE, _ConstantsJs2["default"].MODE_DATETIME, _ConstantsJs2["default"].MODE_TIME]),
@@ -1352,7 +1362,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      subtractMonth: _react.PropTypes.func.isRequired,
 	      addMonth: _react.PropTypes.func.isRequired,
 	      viewDate: _react.PropTypes.object.isRequired,
-	      selectedDate: _react.PropTypes.object.isRequired,
+	      selectedDate: _react.PropTypes.object,
 	      showToday: _react.PropTypes.bool,
 	      viewMode: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number]),
 	      daysOfWeekDisabled: _react.PropTypes.array,
@@ -1582,7 +1592,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else if (prevMonth.year() > year || prevMonth.year() === year && prevMonth.month() > month) {
 	          classes["new"] = true;
 	        }
-	        if (prevMonth.isSame((0, _moment2["default"])({
+	        if (_this.props.selectedDate && prevMonth.isSame((0, _moment2["default"])({
 	          y: _this.props.selectedDate.year(),
 	          M: _this.props.selectedDate.month(),
 	          d: _this.props.selectedDate.date()
@@ -1705,7 +1715,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      subtractMonth: _react.PropTypes.func.isRequired,
 	      addMonth: _react.PropTypes.func.isRequired,
 	      viewDate: _react.PropTypes.object.isRequired,
-	      selectedDate: _react.PropTypes.object.isRequired,
+	      selectedDate: _react.PropTypes.object,
 	      showToday: _react.PropTypes.bool,
 	      daysOfWeekDisabled: _react.PropTypes.array,
 	      setSelectedDate: _react.PropTypes.func.isRequired,
@@ -1883,6 +1893,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _moment = __webpack_require__(39);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
 	var _classnames = __webpack_require__(40);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
@@ -1907,7 +1921,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        classes = {
 	          year: true,
 	          old: i === -1 | i === 10,
-	          active: _this.props.selectedDate.year() === year
+	          active: (_this.props.selectedDate || (0, _moment2["default"])()).year() === year
 	        };
 	        years.push(_react2["default"].createElement(
 	          "span",
@@ -1979,7 +1993,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      subtractDecade: _react.PropTypes.func.isRequired,
 	      addDecade: _react.PropTypes.func.isRequired,
 	      viewDate: _react.PropTypes.object.isRequired,
-	      selectedDate: _react.PropTypes.object.isRequired,
+	      selectedDate: _react.PropTypes.object,
 	      setViewYear: _react.PropTypes.func.isRequired
 	    },
 	    enumerable: true
@@ -2016,6 +2030,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _react = __webpack_require__(38);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _moment = __webpack_require__(39);
+
+	var _moment2 = _interopRequireDefault(_moment);
 
 	var _DateTimePickerMinutes = __webpack_require__(50);
 
@@ -2123,7 +2141,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                  _react2["default"].createElement(
 	                    "span",
 	                    { className: "timepicker-hour", onClick: _this.showHours },
-	                    _this.props.selectedDate.format("h")
+	                    (_this.props.selectedDate || (0, _moment2["default"])()).format("h")
 	                  )
 	                ),
 	                _react2["default"].createElement(
@@ -2137,7 +2155,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                  _react2["default"].createElement(
 	                    "span",
 	                    { className: "timepicker-minute", onClick: _this.showMinutes },
-	                    _this.props.selectedDate.format("mm")
+	                    (_this.props.selectedDate || (0, _moment2["default"])()).format("mm")
 	                  )
 	                ),
 	                _react2["default"].createElement("td", { className: "separator" }),
@@ -2147,7 +2165,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                  _react2["default"].createElement(
 	                    "button",
 	                    { className: "btn btn-primary", onClick: _this.props.togglePeriod, type: "button" },
-	                    _this.props.selectedDate.format("A")
+	                    (_this.props.selectedDate || (0, _moment2["default"])()).format("A")
 	                  )
 	                )
 	              ),
@@ -2205,7 +2223,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      subtractMinute: _react.PropTypes.func.isRequired,
 	      addMinute: _react.PropTypes.func.isRequired,
 	      viewDate: _react.PropTypes.object.isRequired,
-	      selectedDate: _react.PropTypes.object.isRequired,
+	      selectedDate: _react.PropTypes.object,
 	      togglePeriod: _react.PropTypes.func.isRequired,
 	      mode: _react.PropTypes.oneOf([_ConstantsJs2["default"].MODE_DATE, _ConstantsJs2["default"].MODE_DATETIME, _ConstantsJs2["default"].MODE_TIME])
 	    },
