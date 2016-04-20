@@ -8,7 +8,7 @@ export default class DateTimeField extends Component {
   static isDateTimePresent = (dateTime) => {
     return dateTime && dateTime.toString().trim() !== '';
   }
-  
+
   static defaultProps = {
     format: "x",
     showToday: true,
@@ -66,13 +66,13 @@ export default class DateTimeField extends Component {
       left: -9999,
       zIndex: "9999 !important"
     },
-    viewDate: DateTimeField.isDateTimePresent(this.props.dateTime) ? 
+    viewDate: DateTimeField.isDateTimePresent(this.props.dateTime) ?
       moment(this.props.dateTime, this.props.format, true).startOf('month') :
       moment().startOf('month'),
-    selectedDate: DateTimeField.isDateTimePresent(this.props.dateTime) ? 
+    selectedDate: DateTimeField.isDateTimePresent(this.props.dateTime) ?
       moment(this.props.dateTime, this.props.format, true) :
       null,
-    inputValue: typeof this.props.defaultText !== "undefined" ? this.props.defaultText : 
+    inputValue: typeof this.props.defaultText !== "undefined" ? this.props.defaultText :
       (DateTimeField.isDateTimePresent(this.props.dateTime) ?
         moment(this.props.dateTime, this.props.format, true).format(this.resolvePropsInputFormat()) :
         '')
@@ -90,7 +90,7 @@ export default class DateTimeField extends Component {
       state.selectedDate = moment(nextProps.dateTime, nextProps.format, true);
       state.inputValue = moment(nextProps.dateTime, nextProps.format, true).format(nextProps.inputFormat ? nextProps.inputFormat : this.state.inputFormat);
     }
-    
+
     return this.setState(state);
   }
 
@@ -155,7 +155,7 @@ export default class DateTimeField extends Component {
 
   setSelectedMinute = (e) => {
     return this.setState({
-      selectedDate: this.state.selectedDate.clone().hour(this.state.selectedDate.hours()).minute(parseInt(e.target.innerHTML))
+      selectedDate: (this.state.selectedDate || moment()).clone().hour(this.state.selectedDate.hours()).minute(parseInt(e.target.innerHTML))
     }, function() {
       this.closePicker();
       this.props.onChange(this.state.selectedDate.format(this.props.format));
@@ -179,7 +179,7 @@ export default class DateTimeField extends Component {
 
   addMinute = () => {
     return this.setState({
-      selectedDate: this.state.selectedDate.clone().add(1, "minutes")
+      selectedDate: (this.state.selectedDate || moment()).clone().add(1, "minutes")
     }, function() {
       this.props.onChange(this.state.selectedDate.format(this.props.format));
       return this.setState({
@@ -190,7 +190,7 @@ export default class DateTimeField extends Component {
 
   addHour = () => {
     return this.setState({
-      selectedDate: this.state.selectedDate.clone().add(1, "hours")
+      selectedDate: (this.state.selectedDate || moment()).clone().add(1, "hours")
     }, function() {
       this.props.onChange(this.state.selectedDate.format(this.props.format));
       return this.setState({
@@ -271,7 +271,7 @@ export default class DateTimeField extends Component {
       showTimePicker: !this.state.showTimePicker
     });
   }
-  
+
   setWidgetStylesAndClasses = () => {
     let classes, gBCR, offset, placePosition, scrollTop, styles;
     gBCR = this.refs.dtpbutton.getBoundingClientRect();
@@ -321,7 +321,7 @@ export default class DateTimeField extends Component {
       return this.setWidgetStylesAndClasses();
     }
   }
-  
+
   onFocus = () => {
     if (this.props.disabled) { return; }
     this.setState({ showPicker: true });
@@ -401,7 +401,7 @@ export default class DateTimeField extends Component {
               widgetClasses={this.state.widgetClasses}
               widgetStyle={this.state.widgetStyle}
         />
-        <div className={"input-group date " + this.props.inputGroupClass + " " + this.size()} 
+        <div className={"input-group date " + this.props.inputGroupClass + " " + this.size()}
              ref="datetimepicker">
           <input className="form-control" onChange={this.onChange} onFocus={this.onFocus} type="text" value={this.state.inputValue} disabled={this.props.disabled} {...this.props.inputProps}/>
           <span className="input-group-addon" onBlur={this.onBlur} onClick={this.onClick} ref="dtpbutton">

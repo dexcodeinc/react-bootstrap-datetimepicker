@@ -212,7 +212,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.setSelectedMinute = function (e) {
 	      return _this.setState({
-	        selectedDate: _this.state.selectedDate.clone().hour(_this.state.selectedDate.hours()).minute(parseInt(e.target.innerHTML))
+	        selectedDate: (_this.state.selectedDate || (0, _moment2["default"])()).clone().hour(_this.state.selectedDate.hours()).minute(parseInt(e.target.innerHTML))
 	      }, function () {
 	        this.closePicker();
 	        this.props.onChange(this.state.selectedDate.format(this.props.format));
@@ -236,7 +236,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.addMinute = function () {
 	      return _this.setState({
-	        selectedDate: _this.state.selectedDate.clone().add(1, "minutes")
+	        selectedDate: (_this.state.selectedDate || (0, _moment2["default"])()).clone().add(1, "minutes")
 	      }, function () {
 	        this.props.onChange(this.state.selectedDate.format(this.props.format));
 	        return this.setState({
@@ -247,7 +247,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.addHour = function () {
 	      return _this.setState({
-	        selectedDate: _this.state.selectedDate.clone().add(1, "hours")
+	        selectedDate: (_this.state.selectedDate || (0, _moment2["default"])()).clone().add(1, "hours")
 	      }, function () {
 	        this.props.onChange(this.state.selectedDate.format(this.props.format));
 	        return this.setState({
@@ -1782,14 +1782,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.renderMonths = function () {
 	      var classes, i, month, months, monthsShort;
-	      month = _this.props.selectedDate.month();
+	      month = ((0, _moment2["default"])() || _this.props.selectedDate).month();
 	      monthsShort = _moment2["default"].monthsShort();
 	      i = 0;
 	      months = [];
 	      while (i < 12) {
 	        classes = {
 	          month: true,
-	          "active": i === month && _this.props.viewDate.year() === _this.props.selectedDate.year()
+	          "active": i === month && _this.props.selectedDate && _this.props.viewDate.year() === _this.props.selectedDate.year()
 	        };
 	        months.push(_react2["default"].createElement(
 	          "span",
@@ -1856,7 +1856,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      subtractYear: _react.PropTypes.func.isRequired,
 	      addYear: _react.PropTypes.func.isRequired,
 	      viewDate: _react.PropTypes.object.isRequired,
-	      selectedDate: _react.PropTypes.object.isRequired,
+	      selectedDate: _react.PropTypes.object,
 	      showYears: _react.PropTypes.func.isRequired,
 	      setViewMonth: _react.PropTypes.func.isRequired
 	    },
