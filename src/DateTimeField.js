@@ -80,6 +80,16 @@ export default class DateTimeField extends Component {
 
   componentWillReceiveProps = (nextProps) => {
     let state = {};
+
+    // when clear form, dateTime will be null or "".
+    // this code will reset field (like form new, not have dateTime as selectedDate)
+    // if it throwing error, we should be find another solution
+    if (!DateTimeField.isDateTimePresent(nextProps.dateTime)){
+      state.inputValue = "";
+      state.viewDate = moment().startOf('month');
+      state.selectedDate = null;
+    }
+    
     if (nextProps.inputFormat !== this.props.inputFormat) {
       state.inputFormat = nextProps.inputFormat;
       state.inputValue = moment(nextProps.dateTime, nextProps.format, true).format(nextProps.inputFormat);

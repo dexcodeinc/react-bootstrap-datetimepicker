@@ -141,6 +141,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.componentWillReceiveProps = function (nextProps) {
 	      var state = {};
+
+	      // when clear form, dateTime will be null or "".
+	      // this code will reset field (like form new, not have dateTime as selectedDate)
+	      // if it throwing error, we should be find another solution
+	      if (!DateTimeField.isDateTimePresent(nextProps.dateTime)) {
+	        state.inputValue = "";
+	        state.viewDate = (0, _moment2["default"])().startOf('month');
+	        state.selectedDate = null;
+	      }
+
 	      if (nextProps.inputFormat !== _this.props.inputFormat) {
 	        state.inputFormat = nextProps.inputFormat;
 	        state.inputValue = (0, _moment2["default"])(nextProps.dateTime, nextProps.format, true).format(nextProps.inputFormat);
