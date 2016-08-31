@@ -383,6 +383,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 	    };
 
+	    this.onKeyDown = function (e) {
+	      if (_this.props.mode == _ConstantsJs2["default"].MODE_DATE) {
+	        switch (e.which) {
+	          case 27: //escape
+	          case 13: //enter
+	          case 9:
+	            //tab
+	            if (_this.state.showPicker) {
+	              _this.closePicker();
+	            }
+	            break;
+	        }
+	      }
+	    };
+
 	    this.onClick = function () {
 	      if (_this.props.disabled) {
 	        return;
@@ -490,7 +505,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          "div",
 	          { className: "input-group date " + this.props.inputGroupClass + " " + this.size(),
 	            ref: "datetimepicker" },
-	          _react2["default"].createElement("input", _extends({ className: this.state.inputFormClass, onChange: this.onChange, onFocus: this.onFocus, type: "text", value: this.state.inputValue, disabled: this.props.disabled }, this.props.inputProps)),
+	          _react2["default"].createElement("input", _extends({ className: this.state.inputFormClass, onKeyDown: this.onKeyDown, onChange: this.onChange, onFocus: this.onFocus, type: "text", value: this.state.inputValue, disabled: this.props.disabled }, this.props.inputProps)),
 	          _react2["default"].createElement(
 	            "span",
 	            { className: "input-group-addon", onBlur: this.onBlur, onClick: this.onClick, ref: "dtpbutton" },

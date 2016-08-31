@@ -323,6 +323,20 @@ export default class DateTimeField extends Component {
 
   }
 
+  onKeyDown = (e) => {
+    if (this.props.mode == Constants.MODE_DATE) {
+      switch (e.which) {
+        case 27: //escape
+        case 13: //enter
+        case 9:  //tab
+          if (this.state.showPicker) {
+            this.closePicker();
+          }
+          break;
+      }
+    }
+  }
+
   onClick = () => {
     if (this.props.disabled) { return; }
     let classes, gBCR, offset, placePosition, scrollTop, styles;
@@ -415,7 +429,7 @@ export default class DateTimeField extends Component {
         />
         <div className={"input-group date " + this.props.inputGroupClass + " " + this.size()}
              ref="datetimepicker">
-          <input className={this.state.inputFormClass} onChange={this.onChange} onFocus={this.onFocus} type="text" value={this.state.inputValue} disabled={this.props.disabled} {...this.props.inputProps}/>
+          <input className={this.state.inputFormClass} onKeyDown={this.onKeyDown} onChange={this.onChange} onFocus={this.onFocus} type="text" value={this.state.inputValue} disabled={this.props.disabled} {...this.props.inputProps}/>
           <span className="input-group-addon" onBlur={this.onBlur} onClick={this.onClick} ref="dtpbutton">
             <span className={classnames("glyphicon", this.state.buttonIcon)} />
           </span>
