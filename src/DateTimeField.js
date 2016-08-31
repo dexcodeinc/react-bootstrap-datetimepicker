@@ -231,7 +231,7 @@ export default class DateTimeField extends Component {
 
   subtractMinute = () => {
     return this.setState({
-      selectedDate: this.state.selectedDate.clone().subtract(1, "minutes")
+      selectedDate: (this.state.selectedDate || moment()).clone().subtract(1, "minutes")
     }, () => {
       this.props.onChange(this.state.selectedDate.format(this.props.format));
       return this.setState({
@@ -242,7 +242,7 @@ export default class DateTimeField extends Component {
 
   subtractHour = () => {
     return this.setState({
-      selectedDate: this.state.selectedDate.clone().subtract(1, "hours")
+      selectedDate: (this.state.selectedDate || moment()).clone().subtract(1, "hours")
     }, () => {
       this.props.onChange(this.state.selectedDate.format(this.props.format));
       return this.setState({

@@ -136,7 +136,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      },
 	      viewDate: DateTimeField.isDateTimePresent(this.props.dateTime) ? (0, _moment2["default"])(this.props.dateTime, this.props.format, true).startOf('month') : (0, _moment2["default"])().startOf('month'),
 	      selectedDate: DateTimeField.isDateTimePresent(this.props.dateTime) ? (0, _moment2["default"])(this.props.dateTime, this.props.format, true) : null,
-	      inputValue: typeof this.props.defaultText !== "undefined" ? this.props.defaultText : DateTimeField.isDateTimePresent(this.props.dateTime) ? (0, _moment2["default"])(this.props.dateTime, this.props.format, true).format(this.resolvePropsInputFormat()) : ''
+	      inputValue: typeof this.props.defaultText !== "undefined" ? this.props.defaultText : DateTimeField.isDateTimePresent(this.props.dateTime) ? (0, _moment2["default"])(this.props.dateTime, this.props.format, true).format(this.resolvePropsInputFormat()) : '',
+	      inputFormClass: this.props.inputRequired == true ? 'form-control form-control-required' : 'form-control'
 	    };
 
 	    this.componentWillReceiveProps = function (nextProps) {
@@ -286,7 +287,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.subtractMinute = function () {
 	      return _this.setState({
-	        selectedDate: _this.state.selectedDate.clone().subtract(1, "minutes")
+	        selectedDate: (_this.state.selectedDate || (0, _moment2["default"])()).clone().subtract(1, "minutes")
 	      }, function () {
 	        _this.props.onChange(_this.state.selectedDate.format(_this.props.format));
 	        return _this.setState({
@@ -297,7 +298,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.subtractHour = function () {
 	      return _this.setState({
-	        selectedDate: _this.state.selectedDate.clone().subtract(1, "hours")
+	        selectedDate: (_this.state.selectedDate || (0, _moment2["default"])()).clone().subtract(1, "hours")
 	      }, function () {
 	        _this.props.onChange(_this.state.selectedDate.format(_this.props.format));
 	        return _this.setState({
@@ -489,7 +490,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          "div",
 	          { className: "input-group date " + this.props.inputGroupClass + " " + this.size(),
 	            ref: "datetimepicker" },
-	          _react2["default"].createElement("input", _extends({ className: "form-control", onChange: this.onChange, onFocus: this.onFocus, type: "text", value: this.state.inputValue, disabled: this.props.disabled }, this.props.inputProps)),
+	          _react2["default"].createElement("input", _extends({ className: this.state.inputFormClass, onChange: this.onChange, onFocus: this.onFocus, type: "text", value: this.state.inputValue, disabled: this.props.disabled }, this.props.inputProps)),
 	          _react2["default"].createElement(
 	            "span",
 	            { className: "input-group-addon", onBlur: this.onBlur, onClick: this.onClick, ref: "dtpbutton" },
@@ -536,7 +537,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      viewMode: _react.PropTypes.string,
 	      size: _react.PropTypes.oneOf([_ConstantsJs2["default"].SIZE_SMALL, _ConstantsJs2["default"].SIZE_MEDIUM, _ConstantsJs2["default"].SIZE_LARGE]),
 	      daysOfWeekDisabled: _react.PropTypes.arrayOf(_react.PropTypes.number),
-	      disabled: _react.PropTypes.bool
+	      disabled: _react.PropTypes.bool,
+	      inputRequired: _react.PropTypes.bool
 	    },
 	    enumerable: true
 	  }]);
