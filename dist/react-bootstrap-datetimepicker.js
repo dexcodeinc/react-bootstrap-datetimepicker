@@ -503,7 +503,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }),
 	        _react2["default"].createElement(
 	          "div",
-	          { className: "input-group date " + this.props.inputGroupClass + " " + this.size(),
+	          { className: "input-group date " + this.props.inputGroupClass || '' + " " + this.size(),
 	            ref: "datetimepicker" },
 	          _react2["default"].createElement("input", _extends({ className: this.state.inputFormClass, onKeyDown: this.onKeyDown, onChange: this.onChange, onFocus: this.onFocus, type: "text", value: this.state.inputValue, disabled: this.props.disabled }, this.props.inputProps)),
 	          _react2["default"].createElement(
