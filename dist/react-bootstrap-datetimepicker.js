@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("React"), require("moment"));
+		module.exports = factory(require("React"), require("ReactDOM"), require("moment"));
 	else if(typeof define === 'function' && define.amd)
-		define(["React", "moment"], factory);
+		define(["React", "ReactDOM", "moment"], factory);
 	else if(typeof exports === 'object')
-		exports["ReactBootstrapDatetimepicker"] = factory(require("React"), require("moment"));
+		exports["ReactBootstrapDatetimepicker"] = factory(require("React"), require("ReactDOM"), require("moment"));
 	else
-		root["ReactBootstrapDatetimepicker"] = factory(root["React"], root["moment"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_38__, __WEBPACK_EXTERNAL_MODULE_39__) {
+		root["ReactBootstrapDatetimepicker"] = factory(root["React"], root["ReactDOM"], root["moment"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_38__, __WEBPACK_EXTERNAL_MODULE_39__, __WEBPACK_EXTERNAL_MODULE_40__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -83,19 +83,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _moment = __webpack_require__(39);
+	var _reactDom = __webpack_require__(39);
+
+	var _moment = __webpack_require__(40);
 
 	var _moment2 = _interopRequireDefault(_moment);
 
-	var _classnames = __webpack_require__(40);
+	var _classnames = __webpack_require__(41);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _DateTimePickerJs = __webpack_require__(41);
+	var _DateTimePickerJs = __webpack_require__(42);
 
 	var _DateTimePickerJs2 = _interopRequireDefault(_DateTimePickerJs);
 
-	var _ConstantsJs = __webpack_require__(51);
+	var _ConstantsJs = __webpack_require__(52);
 
 	var _ConstantsJs2 = _interopRequireDefault(_ConstantsJs);
 
@@ -134,6 +136,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        left: -9999,
 	        zIndex: "9999 !important"
 	      },
+	      widgetArrowStyle: {},
+	      widgetArrowShadowStyle: {},
 	      viewDate: DateTimeField.isDateTimePresent(this.props.dateTime) ? (0, _moment2["default"])(this.props.dateTime, this.props.format, true).startOf('month') : (0, _moment2["default"])().startOf('month'),
 	      selectedDate: DateTimeField.isDateTimePresent(this.props.dateTime) ? (0, _moment2["default"])(this.props.dateTime, this.props.format, true) : null,
 	      inputValue: typeof this.props.defaultText !== "undefined" ? this.props.defaultText : DateTimeField.isDateTimePresent(this.props.dateTime) ? (0, _moment2["default"])(this.props.dateTime, this.props.format, true).format(this.resolvePropsInputFormat()) : '',
@@ -343,11 +347,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.setWidgetStylesAndClasses = function () {
 	      var classes = undefined,
 	          gBCR = undefined,
+	          dtpBCR = undefined,
 	          offset = undefined,
 	          placePosition = undefined,
 	          scrollTop = undefined,
-	          styles = undefined;
+	          styleLeft = undefined,
+	          styles = undefined,
+	          arrowStyles = undefined,
+	          arrowShadowStyles = undefined,
+	          widgetDOM = undefined;
+	      widgetDOM = (0, _reactDom.findDOMNode)(_this.refs.widget);
 	      gBCR = _this.refs.dtpbutton.getBoundingClientRect();
+	      dtpBCR = _this.refs.datetimepicker.getBoundingClientRect();
 	      classes = {
 	        "bootstrap-datetimepicker-widget": true,
 	        "dropdown-menu": true
@@ -358,9 +369,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 	      offset.top = offset.top + _this.refs.datetimepicker.offsetHeight;
 	      scrollTop = window.pageYOffset !== undefined ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
-	      placePosition = _this.props.direction === "up" ? "top" : _this.props.direction === "bottom" ? "bottom" : _this.props.direction === "auto" ? offset.top + _this.refs.widget.offsetHeight > window.offsetHeight + scrollTop && _this.refs.widget.offsetHeight + _this.refs.datetimepicker.offsetHeight > offset.top ? "top" : "bottom" : void 0;
+	      if (_this.props.direction === 'up') {
+	        placePosition = 'top';
+	      } else if (_this.props.direction === 'bottom') {
+	        placePosition = 'bottom';
+	      } else if (_this.props.direction === 'auto') {
+	        if (offset.top + widgetDOM.offsetHeight > window.offsetHeight + scrollTop && widgetDOM.offsetHeight + _this.refs.datetimepicker.offsetHeight > offset.top) {
+	          placePosition = 'top';
+	        } else {
+	          placePosition = 'bottom';
+	        }
+	      } else {
+	        placePosition = void 0;
+	      }
 	      if (placePosition === "top") {
-	        offset.top = -_this.refs.widget.offsetHeight - _this.clientHeight - 2;
+	        offset.top = -widgetDOM.offsetHeight - _this.clientHeight - 2;
 	        classes.top = true;
 	        classes.bottom = false;
 	        classes["pull-right"] = true;
@@ -374,11 +397,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	        display: "block",
 	        position: "absolute",
 	        top: offset.top,
-	        left: "auto",
-	        right: 1
+	        left: 'auto'
 	      };
-	      return _this.setState({
+	      arrowStyles = {
+	        left: 'auto',
+	        right: 14
+	      };
+	      arrowShadowStyles = {
+	        left: 'auto',
+	        right: 15
+	      };
+	      if (offset.left + gBCR.width - widgetDOM.offsetWidth < 0) {
+	        styles['left'] = 0;
+	        arrowStyles = {
+	          left: gBCR.left - dtpBCR.left + gBCR.width / 2 - 9,
+	          right: 'auto'
+	        };
+	        arrowShadowStyles = {
+	          left: arrowStyles.left + 1,
+	          right: 'auto'
+	        };
+	      }
+	      _this.setState({
 	        widgetStyle: styles,
+	        widgetArrowStyle: arrowStyles,
+	        widgetArrowShadowStyle: arrowShadowStyles,
 	        widgetClasses: classes
 	      });
 	    };
@@ -409,10 +452,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          scrollTop = undefined,
 	          styles = undefined;
 	      if (_this.state.showPicker) {
-	        return _this.closePicker();
+	        _this.closePicker();
 	      } else {
 	        _this.setState({ showPicker: true });
-	        return _this.setWidgetStylesAndClasses();
+	        _this.setWidgetStylesAndClasses();
 	      }
 	    };
 
@@ -421,13 +464,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return;
 	      }
 	      _this.setState({ showPicker: true });
-	      return _this.setWidgetStylesAndClasses();
+	      _this.setWidgetStylesAndClasses();
 	    };
 
 	    this.closePicker = function () {
 	      var style = _extends({}, _this.state.widgetStyle);
 	      style.left = -9999;
-	      style.display = "none";
 	      return _this.setState({
 	        showPicker: false,
 	        widgetStyle: style
@@ -499,7 +541,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          viewDate: this.state.viewDate,
 	          viewMode: this.props.viewMode,
 	          widgetClasses: this.state.widgetClasses,
-	          widgetStyle: this.state.widgetStyle
+	          widgetStyle: this.state.widgetStyle,
+	          widgetArrowStyle: this.state.widgetArrowStyle,
+	          widgetArrowShadowStyle: this.state.widgetArrowShadowStyle
 	        }),
 	        _react2["default"].createElement(
 	          "div",
@@ -508,7 +552,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _react2["default"].createElement("input", _extends({ className: this.state.inputFormClass, onKeyDown: this.onKeyDown, onChange: this.onChange, onFocus: this.onFocus, type: "text", value: this.state.inputValue, disabled: this.props.disabled }, this.props.inputProps)),
 	          _react2["default"].createElement(
 	            "span",
-	            { className: "input-group-addon", onBlur: this.onBlur, onClick: this.onClick, ref: "dtpbutton" },
+	            { className: "input-group-addon", onBlur: this.onBlur,
+	              onClick: this.onClick, ref: "dtpbutton" },
 	            _react2["default"].createElement("span", { className: (0, _classnames2["default"])("glyphicon", this.state.buttonIcon) })
 	          )
 	        )
@@ -1122,6 +1167,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 40 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_40__;
+
+/***/ },
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -1175,7 +1226,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1198,19 +1249,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(40);
+	var _classnames = __webpack_require__(41);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _DateTimePickerDateJs = __webpack_require__(42);
+	var _DateTimePickerDateJs = __webpack_require__(43);
 
 	var _DateTimePickerDateJs2 = _interopRequireDefault(_DateTimePickerDateJs);
 
-	var _DateTimePickerTimeJs = __webpack_require__(49);
+	var _DateTimePickerTimeJs = __webpack_require__(50);
 
 	var _DateTimePickerTimeJs2 = _interopRequireDefault(_DateTimePickerTimeJs);
 
-	var _ConstantsJs = __webpack_require__(51);
+	var _ConstantsJs = __webpack_require__(52);
 
 	var _ConstantsJs2 = _interopRequireDefault(_ConstantsJs);
 
@@ -1288,9 +1339,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(DateTimePicker, [{
 	    key: "render",
 	    value: function render() {
+	      var _props = this.props;
+	      var widgetClasses = _props.widgetClasses;
+	      var widgetStyle = _props.widgetStyle;
+	      var widgetArrowStyle = _props.widgetArrowStyle;
+	      var widgetArrowShadowStyle = _props.widgetArrowShadowStyle;
+
 	      return _react2["default"].createElement(
 	        "div",
-	        { className: (0, _classnames2["default"])(this.props.widgetClasses), style: this.props.widgetStyle },
+	        { className: (0, _classnames2["default"])(widgetClasses), style: widgetStyle },
+	        _react2["default"].createElement("div", { className: "widget-arrow", style: widgetArrowStyle }),
+	        _react2["default"].createElement("div", { className: "widget-arrow-shadow", style: widgetArrowShadowStyle }),
 	        _react2["default"].createElement(
 	          "ul",
 	          { className: "list-unstyled" },
@@ -1329,6 +1388,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      maxDate: _react.PropTypes.object,
 	      widgetClasses: _react.PropTypes.object,
 	      widgetStyle: _react.PropTypes.object,
+	      widgetArrowStyle: _react.PropTypes.object,
+	      widgetArrowShadowStyle: _react.PropTypes.object,
 	      togglePicker: _react.PropTypes.func,
 	      setSelectedHour: _react.PropTypes.func,
 	      setSelectedMinute: _react.PropTypes.func
@@ -1343,7 +1404,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1356,7 +1417,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _classCallCheck = __webpack_require__(30)["default"];
 
-	var _Object$keys = __webpack_require__(43)["default"];
+	var _Object$keys = __webpack_require__(44)["default"];
 
 	var _interopRequireDefault = __webpack_require__(37)["default"];
 
@@ -1368,15 +1429,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _DateTimePickerDays = __webpack_require__(46);
+	var _DateTimePickerDays = __webpack_require__(47);
 
 	var _DateTimePickerDays2 = _interopRequireDefault(_DateTimePickerDays);
 
-	var _DateTimePickerMonths = __webpack_require__(47);
+	var _DateTimePickerMonths = __webpack_require__(48);
 
 	var _DateTimePickerMonths2 = _interopRequireDefault(_DateTimePickerMonths);
 
-	var _DateTimePickerYears = __webpack_require__(48);
+	var _DateTimePickerYears = __webpack_require__(49);
 
 	var _DateTimePickerYears2 = _interopRequireDefault(_DateTimePickerYears);
 
@@ -1531,20 +1592,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 43 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(44), __esModule: true };
-
-/***/ },
 /* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(45);
-	module.exports = __webpack_require__(14).Object.keys;
+	module.exports = { "default": __webpack_require__(45), __esModule: true };
 
 /***/ },
 /* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(46);
+	module.exports = __webpack_require__(14).Object.keys;
+
+/***/ },
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.14 Object.keys(O)
@@ -1557,7 +1618,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1580,11 +1641,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _moment = __webpack_require__(39);
+	var _moment = __webpack_require__(40);
 
 	var _moment2 = _interopRequireDefault(_moment);
 
-	var _classnames = __webpack_require__(40);
+	var _classnames = __webpack_require__(41);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -1766,7 +1827,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1789,11 +1850,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(40);
+	var _classnames = __webpack_require__(41);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _moment = __webpack_require__(39);
+	var _moment = __webpack_require__(40);
 
 	var _moment2 = _interopRequireDefault(_moment);
 
@@ -1897,7 +1958,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1920,11 +1981,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _moment = __webpack_require__(39);
+	var _moment = __webpack_require__(40);
 
 	var _moment2 = _interopRequireDefault(_moment);
 
-	var _classnames = __webpack_require__(40);
+	var _classnames = __webpack_require__(41);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -2033,7 +2094,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2058,19 +2119,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _moment = __webpack_require__(39);
+	var _moment = __webpack_require__(40);
 
 	var _moment2 = _interopRequireDefault(_moment);
 
-	var _DateTimePickerMinutes = __webpack_require__(50);
+	var _DateTimePickerMinutes = __webpack_require__(51);
 
 	var _DateTimePickerMinutes2 = _interopRequireDefault(_DateTimePickerMinutes);
 
-	var _DateTimePickerHours = __webpack_require__(52);
+	var _DateTimePickerHours = __webpack_require__(53);
 
 	var _DateTimePickerHours2 = _interopRequireDefault(_DateTimePickerHours);
 
-	var _ConstantsJs = __webpack_require__(51);
+	var _ConstantsJs = __webpack_require__(52);
 
 	var _ConstantsJs2 = _interopRequireDefault(_ConstantsJs);
 
@@ -2266,7 +2327,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2289,7 +2350,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _ConstantsJs = __webpack_require__(51);
+	var _ConstantsJs = __webpack_require__(52);
 
 	var _ConstantsJs2 = _interopRequireDefault(_ConstantsJs);
 
@@ -2426,7 +2487,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2442,7 +2503,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2465,7 +2526,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _ConstantsJs = __webpack_require__(51);
+	var _ConstantsJs = __webpack_require__(52);
 
 	var _ConstantsJs2 = _interopRequireDefault(_ConstantsJs);
 

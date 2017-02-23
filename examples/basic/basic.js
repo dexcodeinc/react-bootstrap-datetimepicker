@@ -36,7 +36,7 @@ class Basic extends Component {
     console.log("newDate", newDate);
     return this.setState({date: newDate});
   }
-  
+
   render() {
     const {date, format, mode, inputFormat, showPicker} = this.state;
     return <DateTimeField
